@@ -1,0 +1,6 @@
+remote_theme: pages-themes/cayman@v0.2.0
+plugins:
+- jekyll-remote-theme
+
+site.title: "League of Legends Vision Control and Support Role Analysis"
+site.description: "DSC80 Final Project"
