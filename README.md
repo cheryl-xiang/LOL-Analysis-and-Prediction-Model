@@ -71,7 +71,7 @@ Below is head of my cleaned DataFrame:
 
 
 ### Univariate Analysis
-For my initial EDA, I performed Univariate Analysis on some of the columns of my DataFrame. 
+For my initial EDA, I performed Univariate Analysis on some of the columns of my DataFrame.  
 
 
 <iframe
@@ -81,4 +81,14 @@ For my initial EDA, I performed Univariate Analysis on some of the columns of my
   frameborder="0"
 ></iframe>
 
-Above, we can see the distribution of wards placed by players across all matches. The histograms is skewed right, with a majority of players placing between 5 and 20 wards and 95 players placing at least 100 wards. 
+Above, we can see the distribution of wards placed by players across all matches. The histograms is skewed right, with a majority of players placing between 5 and 20 wards and 95 players placing at least 100 wards.  
+
+
+<iframe
+  src="assets/univariate-visionscore.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+The distribution of visionscore across all players is also skewed right, but appears to be closer to normal than the distribution of wards placed by players as the right side of the histogram tapers off much more gradually. According to this distribution, aroun 44% players had a vision score between 20 and 39. 
