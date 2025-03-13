@@ -48,15 +48,17 @@ The original data set has 149232 rows, and 123 columns from 12549 recorded match
 
 To prepare the data for analysis, only relevant columns were kept in the dataset:  `gameid`, `position`, `win`, `kills`, `deaths`, `assists`, `wardsplaced`, `wardscleared`, `visionscore`, `damagetochampions`, `monsterkills`, `split`, `teamid`. 
 
-Furthermore, the I renamed the `win` column, originally called `result` and converted its original binary values of 1 indicating win and 0 indicating lose to boolean values for clarity. In order to preserve cohesiveness, I also converted the `wardsplaced`, `wardscleared`, `visionscore`, `damagetochampions`, `monsterkills` columns, which originally contained whole number floats into integers. 
+Furthermore, the I renamed the `win` column, originally called `result` and converted its original binary values of 1 (indicating win) and 0 (indicating lose) to boolean values for clarity. In order to preserve consistency, I also converted the `wardsplaced`, `wardscleared`, `visionscore`, `damagetochampions`, `monsterkills` columns, which originally contained whole number floats into integers. 
 
 Within the League of Legend community, the act of removing enemy wards from the map is most often referred to as "clearing wards" rather than "killing wards," so I renamed the `wardskilled` column to `wardscleared` in order to reflect this convention.
 
 The original data set includes rows with team summary statistics for each match. I will be looking primarily at individual players statisitics, so these rows are not needed, and were filtered out based on the `position` column which contained the string "team" rather any of the five playable positions for team rows. For any analysis that needs to be performed on a team level, team data can be recovered by aggregating the cleaned DataFrame using the `gameid` and `teamid` columns. 
 
-Finally, through inspection I noticed that there is once game that contains missing values for the `wardsplaced`, `wardscleared`, `visionscore`, `damagetochampions`, and `monsterkills` columns. As the original dataset already has over 12500 recorded matches, I decided to drop rows associated with this specific game. 
+Finally, through inspection I noticed that there is one game that contains missing values for the `wardsplaced`, `wardscleared`, `visionscore`, `damagetochampions`, and `monsterkills` columns. As the original dataset already has over 12500 recorded matches, I decided to drop rows associated with this specific game. 
 
-The resulting cleaned DataFrame has 125490 rows, 13 columns. Below is head of my cleaned DataFrame:
+The resulting cleaned DataFrame has 125490 rows, 13 columns. 
+
+Below is head of my cleaned DataFrame:
 
 
 | gameid                | position   | win   |   kills |   deaths |   assists |   wardsplaced |   wardscleared |   visionscore |   damagetochampions |   monsterkills | split   | teamid                                  |
@@ -66,3 +68,17 @@ The resulting cleaned DataFrame has 125490 rows, 13 columns. Below is head of my
 | ESPORTSTMNT01_2690210 | mid        | False |       2 |        2 |         3 |            19 |              7 |            29 |               14258 |             16 | Spring  | oe:team:733ebb9dbf22a401c0127a0c80193ca |
 | ESPORTSTMNT01_2690210 | bot        | False |       2 |        4 |         2 |            12 |              6 |            25 |               11106 |             18 | Spring  | oe:team:733ebb9dbf22a401c0127a0c80193ca |
 | ESPORTSTMNT01_2690210 | sup        | False |       1 |        5 |         6 |            29 |             14 |            69 |                3663 |              0 | Spring  | oe:team:733ebb9dbf22a401c0127a0c80193ca |
+
+
+### Univariate Analysis
+For my initial EDA, I performed Univariate Analysis on some of the columns of my DataFrame. 
+
+
+<iframe
+  src="assets/univariate-wards.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+Above, we can see the distribution of wards placed by players across all matches. The histograms is skewed right, with a majority of players placing between 5 and 20 wards and 95 players placing at least 100 wards. 
