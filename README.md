@@ -75,16 +75,17 @@ For my initial EDA, I performed Univariate Analysis on some of the columns of my
 
 
 <iframe
-  src="assets/univariate-wards.html"
+  src="assets/UnivariateWards.html"
   width="800"
   height="600"
   frameborder="0"
 ></iframe>
+
 Above, we can see the distribution of wards placed by players across all matches. The histograms is skewed right, with a majority of players placing between 5 and 20 wards and 95 players placing at least 100 wards.  
 
 
 <iframe
-  src="assets/univariate-visionscore.html"
+  src="assets/UnivariateVisionScore.html"
   width="800"
   height="600"
   frameborder="0"
