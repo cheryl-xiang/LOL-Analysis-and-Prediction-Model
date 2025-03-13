@@ -29,7 +29,7 @@ The original data set has 149232 rows, and 123 columns from 12549 recorded match
 - `assists`: (int) The 'assists' column records the number of assists a player has made. An assist occurs when a player contributes to eliminating an enemy champion without landing the final blow (kill). This includes actions like dealing damage, providing crowd control, or setting up a kill for an ally player
 
 - `wardsplaced`: (int) The 'wardsplaced' column indicates the number of wards a player has placed on the map throughout a match. 
-- 
+
 - `wardscleared`: (int) The 'wardscleared' column records the number of enemy wards the player has cleared during the game. Clearing wards helps deny vision to the opposing team, reducing their map awareness.
 
 - `visionscore`: (int) The 'visionscore' column represents a player's contribution to vision on the map. It includes both placing and clearing wards, as well as providing vision through abilities or items. The higher the score, the more a player has contributed to vision control during the match.
@@ -41,3 +41,28 @@ The original data set has 149232 rows, and 123 columns from 12549 recorded match
 - `split`: (str) The 'split' column indicates the split or stage of the competitive season in which the data was collected.
 
 - `teamid`: (str) The 'teamid' column contains the identifier or name of the team that the player is part of.
+
+
+## Data Cleaning and Exploratory Data Analysis
+### Data Cleaning
+
+To prepare the data for analysis, only relevant columns were kept in the dataset:  `gameid`, `position`, `win`, `kills`, `deaths`, `assists`, `wardsplaced`, `wardscleared`, `visionscore`, `damagetochampions`, `monsterkills`, `split`, `teamid`. 
+
+Furthermore, the I renamed the `win` column, originally called `result` and converted its original binary values of 1 indicating win and 0 indicating lose to boolean values for clarity. In order to preserve cohesiveness, I also converted the `wardsplaced`, `wardscleared`, `visionscore`, `damagetochampions`, `monsterkills` columns, which originally contained whole number floats into integers. 
+
+Within the League of Legend community, the act of removing enemy wards from the map is most often referred to as "clearing wards" rather than "killing wards," so I renamed the `wardskilled` column to `wardscleared` in order to reflect this convention.
+
+The original data set includes rows with team summary statistics for each match. I will be looking primarily at individual players statisitics, so these rows are not needed, and were filtered out based on the `position` column which contained the string "team" rather any of the five playable positions for team rows. For any analysis that needs to be performed on a team level, team data can be recovered by aggregating the cleaned DataFrame using the `gameid` and `teamid` columns. 
+
+Finally, through inspection I noticed that there is once game that contains missing values for the `wardsplaced`, `wardscleared`, `visionscore`, `damagetochampions`, and `monsterkills` columns. As the original dataset already has over 12500 recorded matches, I decided to drop rows associated with this specific game. 
+
+The resulting cleaned DataFrame has 125490 rows, 13 columns. Below is head of my cleaned DataFrame:
+
+
+| gameid                | position   | win   |   kills |   deaths |   assists |   wardsplaced |   wardscleared |   visionscore |   damagetochampions |   monsterkills | split   | teamid                                  |
+|:----------------------|:-----------|:------|--------:|---------:|----------:|--------------:|---------------:|--------------:|--------------------:|---------------:|:--------|:----------------------------------------|
+| ESPORTSTMNT01_2690210 | top        | False |       2 |        3 |         2 |             8 |              6 |            26 |               15768 |             11 | Spring  | oe:team:733ebb9dbf22a401c0127a0c80193ca |
+| ESPORTSTMNT01_2690210 | jng        | False |       2 |        5 |         6 |             6 |             18 |            48 |               11765 |            115 | Spring  | oe:team:733ebb9dbf22a401c0127a0c80193ca |
+| ESPORTSTMNT01_2690210 | mid        | False |       2 |        2 |         3 |            19 |              7 |            29 |               14258 |             16 | Spring  | oe:team:733ebb9dbf22a401c0127a0c80193ca |
+| ESPORTSTMNT01_2690210 | bot        | False |       2 |        4 |         2 |            12 |              6 |            25 |               11106 |             18 | Spring  | oe:team:733ebb9dbf22a401c0127a0c80193ca |
+| ESPORTSTMNT01_2690210 | sup        | False |       1 |        5 |         6 |            29 |             14 |            69 |                3663 |              0 | Spring  | oe:team:733ebb9dbf22a401c0127a0c80193ca |
