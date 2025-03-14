@@ -82,7 +82,6 @@ For my initial EDA, I performed Univariate Analysis on some of the columns of my
   height="600"
   frameborder="0"
 ></iframe>
-
 Above, we can see the distribution of `wardsplaced` by players across all matches. The histograms is skewed right, with a majority of players placing between 5 and 20 wards and 95 players placing at least 100 wards.  
 
         
@@ -93,7 +92,6 @@ Above, we can see the distribution of `wardsplaced` by players across all matche
   height="600"
   frameborder="0"
 ></iframe>
-
 The distribution of `visionscore` across all players is also skewed right, but appears to be closer to normal than the distribution of wards placed by players as the right side of the histogram tapers off much more gradually. According to this distribution, around 44% players had a vision score between 20 and 39.  
 
         
@@ -108,7 +106,6 @@ I also performed Bivariate Analysis on some of the columns of my DataFrame to lo
   height="600"
   frameborder="0"
 ></iframe>
-
 Looking at the distributions of `visionscore` for winning and losing players, we can see that the median for winning players (41) is higher than the median for losing players (35). This suggests that a higher `visionscore` may be associated with winning a match and that vision control could be an important aspect of a match when it comes to securing a win.
 
   
@@ -119,7 +116,6 @@ Looking at the distributions of `visionscore` for winning and losing players, we
   height="600"
   frameborder="0"
 ></iframe>
-
 From this plot, we can clearly see that the median `visionscore` for players in the support role (77) is noticeably higher than the median scores of other positions, which range from 29 to 41. This suggests that the primary objectives of a support player often revolve around vision control. As such, support players are likely more involved in placing and clearing wards, as well as utilizing champion abilities that enhance vision during the match.
 
           
@@ -201,8 +197,6 @@ Here is the Empirical Distribution of the TVD between the two columns:
   height="600"
   frameborder="0"
 ></iframe>
-
-  
 Following my permutation tests, I found an observed TVD of `0.743589134206336` and a p-value of `0.0`. This p-value is lower than our significance level of `0.05`, so we reject the null hypothesis.
 
    
@@ -234,8 +228,6 @@ Here is the Empirical Distribution of the TVD between the two columns:
   height="600"
   frameborder="0"
 ></iframe>
-
-  
 This time, I found an observed TVD of `0.0` and a p-value of `1.0`. This p-value is much higher than our significance level of `0.05`, so we fail to reject the null hypothesis.
 
    
@@ -282,7 +274,6 @@ Below is the observed mean combined `visionscore` of winning and losing teams. T
   height="600"
   frameborder="0"
 ></iframe>
-
 Above we can see the empirical distribution of the difference in means of combined `visionscore` (win - lose) obtained from our permutation test. According to the plot, the majority of the differences are centered around `0`. Additionally, this hypothesis test resulted in a p-value of `0.0`. As such, we reject our null hypothesis that the distribution of combined `visionscore` for teams who won is the same for teams who did not win. Specifically, teams that won tended to have a higher combined `visionscore`, suggesting that vision control may be a key factor in achieving victory in League of Legends.
 
 
@@ -336,7 +327,6 @@ Here is the **confusion matrix** for my final model:
   height="400"
   frameborder="0"
 ></iframe>
-
   
 
 ## Fairness Analysis
@@ -358,8 +348,7 @@ For this section, I am assessing the fairness of my model among different groups
 
 - **Evaluation Metric:** Precision
 
-
-   
+  
 
 Here is the empirical distribution of the difference in precision (X - Y)
 
@@ -369,6 +358,4 @@ Here is the empirical distribution of the difference in precision (X - Y)
   height="600"
   frameborder="0"
 ></iframe>
-
-
 This permutation test yielded an observed difference of `0.14087139876292287` and a p-value of `0.0`, which is less than my significance level of `0.05`. As a result, I reject the null hypothesis that the classifier's precision is the same for both players with over and under 12000 `damagetochampions`, and any differences are due to chance. Based on this, my model seems to be unfair, achieving a higher precision for players with at least 12000 `damagetochampions`.
