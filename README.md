@@ -346,8 +346,8 @@ Here is the **confusion matrix** for my final model:
 
 <iframe
   src="assets/FinalConfusionMatrix.png"
-  width="600"
-  height="400"
+  width="800"
+  height="600"
   frameborder="0"
 ></iframe>
 
@@ -380,8 +380,8 @@ Here is the empirical distribution of the difference in precision (X - Y)
 
 <iframe
   src="assets/DiffPrecision.html"
-  width="600"
-  height="400"
+  width="800"
+  height="600"
   frameborder="0"
 ></iframe>
 
