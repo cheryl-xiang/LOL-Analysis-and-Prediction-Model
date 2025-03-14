@@ -1,16 +1,18 @@
 # League of Legends Vision Control and Support Role Analysis
-UCSD DSC80 Final Project
+**UCSD DSC80 Final Project**
 
 League of Legends Vision Control and Support Role Analysis is a comprehensive data science project conducted at UCSD. The project includes in-depth  analysis, starting from EDA to hypothesis testing, development of baseline models, and a fairness analysis. 
 
 Author: Cheryl Xiang
 
 ## Introduction
-League of Legends is a popular multiplayer online battle arena (MOBA) game developed by Riot Games, where two teams of five players compete to destroy the opposing team's Nexus, a core building located in their respective bases. The game combines strategy, teamwork, and skill, featuring a wide roster of champions, each with unique abilities.
+**League of Legends** is a popular multiplayer online battle arena (MOBA) game developed by Riot Games, where two teams of five players compete to destroy the opposing team's Nexus, a core building located in their respective bases. The game combines strategy, teamwork, and skill, featuring a wide roster of champions, each with unique abilities.
 
 The dataset I will be working with is from 	[Oracle's Elixir](https://oracleselixir.com/tools/downloads), which contains data on League of Legend Competitive Matches from 2014 to the 2025. For this project, I will be focusing on data from 2022 since it has the most recorded games of of recent years. The LOL landscape changes significantly from year to year, so I have chosen not to combine data across multiple years.
 
 In this project, I will investigate the relationship between vision control/placing wards and winning a match. While there are many moving components to a LOL match, one that is sometimes overlooked is **vision control**. Vision control refers to the strategic management of "vision" or the ability to see and monitor parts of the game map that are not directly in a player's line of sight. This is achieved for the most part through placing your own wards as well as clearing enemy wards. Wards are used to provide vision in specific areas, allowing a team to detect enemy movements, objectives, or potential threats, which allows teams to make informed decisions about key areas of the map and help teams to secure important match objectives. 
+
+Through my exploration of this data set, I aim to answer the question: **How important is vision control in a League of Legends match?**
 
 ### DataFrame Columns 
 
@@ -177,9 +179,9 @@ In this part, I will be running permutation tests to check if the missingness of
 
 First, I will be testing if the missingness of `teamid` is dependent on `split` using the following hypotheses:
 
-**Null Hypothesis:** The distribution of 'split' when 'teamid' is missing is the same as the distribution of 'split' when 'teamid' is not missing.
+**Null Hypothesis:** The distribution of `split` when `teamid` is missing is the same as the distribution of `split` when `teamid` is not missing.
 
-**Alternate Hypothesis:** The distribution of 'split' when 'teamid' is missing is ***NOT** the same as the distribution of 'split' when 'teamid' is not missing.
+**Alternate Hypothesis:** The distribution of `split` when `teamid` is missing is ***NOT** the same as the distribution of `split` when `teamid` is not missing.
 
 Here is the distribution of `split` when `teamid` is and is not missing: 
 
@@ -218,9 +220,9 @@ Following my permutation tests, I found an observed TVD of `0.743589134206336` a
 
 I will also be testing if the missingness of `teamid` depends on `position` using the folowing hypotheses:
 
-**Null Hypothesis:** The distribution of 'position' when 'teamid' is missing is the same as the distribution of 'position' when 'teamid' is not missing.
+**Null Hypothesis:** The distribution of `position` when `teamid` is missing is the same as the distribution of `position` when `teamid` is not missing.
 
-**Alternate Hypothesis:** The distribution of 'position' when 'teamid' is missing is ***NOT** the same as the distribution of 'position' when 'teamid' is not missing.
+**Alternate Hypothesis:** The distribution of `position` when `teamid` is missing is ***NOT** the same as the distribution of `position` when `teamid` is not missing.
 
 
 Here is the distribution of `position` when `teamid` is and is not missing: 
@@ -246,3 +248,99 @@ Here is the Empirical Distribution of the TVD between the two columns:
 
   
 This time, I found an observed TVD of `0.0` and a p-value of `1.0`. This p-value is much higher than our significance level of `0.05`, so we fail to reject the null hypothesis.
+
+  
+
+
+
+## Hypothesis Testing
+
+For this hypothesis test, I will be testing the significance of `visionscore` as a factor when it comes to winning a League of Legends match by assessing if there is a significant difference in the distribution of combined `visionscore` between teams who did and did not win. Through this test, we can further understand the relationship between Vision Score/Vision Control and winning a match. 
+
+
+**Null Hypothesis:** The distribution of combined `visionscore` for teams who won is the same for teams who did not win
+
+**Alternate Hypothesis**: The distribution of combined `visionscore` for teams who won is **NOT** the same for teams who did not win
+
+**Test Statistic:** The difference in means of combined `visionscore` for teams who won and teams who lost (Win - Lose)
+
+**Significance Level:** 0.05
+
+  
+The null and alternative hypotheses were selected to directly test the impact of vision control on match outcomes.
+
+I will be using a simplified DataFrame for my analysis with a column containing the combined `visionscore` of each team in every match and a column indicating if they won or lost the match. Here is the head of the simplified DataFrame.
+
+
+| win   |   visionscore_combined |
+|:------|-----------------------:|
+| True  |                    339 |
+| True  |                    317 |
+| False |                    312 |
+| False |                    343 |
+| False |                    226 |
+
+
+Below is the observed mean combined `visionscore` of winning and losing teams. There is an observed difference in means of `26.139580309728075`.
+
+| win   |   visionscore_combined |
+|:------|-----------------------:|
+| False |                212.07  |
+| True  |                238.209 |
+
+
+<iframe
+  src="assets/VSDiffMeans.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+Above we can see the empirical distribution of the difference in means of combined `visionscore` (win - lose) obtained from our permutation test. According to the plot, the majority of the differences are centered around `0`. Additionally, this hypothesis test resulted in a p-value of `0.0`. As such, we reject our null hypothesis that the distribution of combined `visionscore` for teams who won is the same for teams who did not win. Specifically, teams that won tended to have a higher combined `visionscore`, suggesting that vision control may be a key factor in achieving victory in League of Legends.
+
+
+## Framing a Prediction Problem
+
+Throughout this analysis, I noticed some patterns in the columns for each of the five positions played in League of Legends. In particular, I noticed that many of the vision related statistics (including `wardsplaced`, and `visionscore`) seem to be skewed higher for the support role compared to other roles such as jungle or bottom. Based on this, I want to answer the following prediction problem: **Can I predict whether or not a player's position was support based on their game statistics?**
+
+
+In order to do this, I will build a binary classifier model with a One-Hot Encoded column `position_sup` derived from the `position` column in my DataFrame with `1` indicating that the player was in the support role and `0` indicating that they were some other role. This column will be my response variable, as I will be predicting whether or not person played support based on their match statistics.
+
+
+The metric I have chosen to evaluate my model is **precision**. I want my model to correctly identify players who are actually in the support role and avoid incorrectly labeling non-support players as support. Precision helps focus on minimizing these false positives. Additionally, there is an imbalance in the data between players who play support and those who play other roles, as only 1 in 5 players on a team will be in the suppport role. If I evaluated my model based on accuracy, I could easily achieve a high accuracy score by simply predicting the majority class (non-support players) most of the time. However, this would ignore the minority class (support players) and fail to correctly identify them. Furthermore, while the F1-score focuses equally on precision recall, my main focus is avoiding incorrectly identifying non-support players as support, so I have chosen to use precision rather than working to simultaneously maximize recall.
+
+To avoid overfitting my model and allow for evaluation of my model, I will be splitting my dataset into two part: **25%** testing data and **75%** training data. For both my baseline and final model, I will be using the same split of seen and unseen data so that I can compare precision between the two models.
+
+
+All the columns I will be using for my model are statistics that are collected throughout the match. We are predicting if someone played support after the match, so they will be known at the time of prediction. 
+
+    
+
+
+## Baseline Model
+
+For my baseline model, I used a Random Forest Classifier, with the following four features: `visionscore`, `wardsplaced`, `kills`, and `assists`. Based on my exploration of the data set, I have noticed that support players tend to have higher values in the `visionscore`, `wardsplaced`, and `assists` columns compared to the four other positions in a League of Legends team. Conversely, they also tend to have a lower `kills` count compared to other positions. These patterns suggest that these columns would be good predictors of whether or not a player's position was support. All four of the selected feature are numerical. Match length times can vary greatly, which can lead to skewed distributions for each feature, so I used a StandardScaler Transformer to standardize the features.
+
+After fitting, this baseline model earned a precision score of `0.9322591252877342`. This high precision indicates that, out of all the instances the model predicted as "positive" (player is support), a very high proportion were actually correct. Given this, I believe the model is performing well, especially in terms of minimizing false positives.
+
+  
+
+## Final Model
+
+To improve my model, I first added two new numerical features: `damagetochampions` and `monsterkills`. Both of these columns are numerical, so I will be using the StandardScaler transformer on them. In League of Legends matches, the role of support does not play a big part in dealing damage or making kills, but rather focuses on assisting other players on your team in terms of vision, crowd control, and utility (such as heals and shields). As a result, support players tend to have lower damage to champions (the opposing team's players) and monster kills, since dealing damage is not their focus. Players in support roles should have lower numbers in these DataFrame columns, so I believe they would make suitable features for my improved model.
+
+I also used `GridSearchCV` to tune the following hyperparameters for my final Random Forest Classifier model: max_depth, min_samples_split, and criterion. I chose to tune max depth, because it is an important factor when it comes to overfitting or underfitting models. A bigger max depth results in less bias and more variance, while a bigger 'min_samples_split' results in more bias and less variance, so I also want to tune this hyperparameter in order to balance the two out. Finally, I am looking at criterion to improve the overall quality of the splits.After verifying that **entropy** was the best criterion for my model, I focused on the two numerical hyperparameters. In each iteration of `GridSearchCV`, I selected 3 values for both max_depth and min_samples_split. From there, I performed `GridSearchCV` within the range of the resulting ideal hyperparameter until I narrowed my range enough for the values to stop changing. After this process, the best hyperparameters turned out to be: criterion = **entropy**, max_depth = **12**, and min_samples_split = **10**.
+
+  
+My final model achieved a precision score of `0.9790356394129979`, which is around a **5%** improvement from my baseline model's precision score. This significant improvement in precision suggests that my final model is much better at correctly identifying support players, with a lower rate of false positives compared to the baseline model.
+
+  
+Here is the **confusion matrix** for my final model:
+
+
+<iframe
+  src="assets/FinalConfusionMatrix.png"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
