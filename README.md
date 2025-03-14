@@ -84,7 +84,7 @@ For my initial EDA, I performed Univariate Analysis on some of the columns of my
 ></iframe>
 Above, we can see the distribution of `wardsplaced` by players across all matches. The histograms is skewed right, with a majority of players placing between 5 and 20 wards and 95 players placing at least 100 wards.  
 
-        
+         
 
 <iframe
   src="assets/UnivariateVisionScore.html"
@@ -94,7 +94,7 @@ Above, we can see the distribution of `wardsplaced` by players across all matche
 ></iframe>
 The distribution of `visionscore` across all players is also skewed right, but appears to be closer to normal than the distribution of wards placed by players as the right side of the histogram tapers off much more gradually. According to this distribution, around 44% players had a vision score between 20 and 39.  
 
-        
+     
 
 ### Bivariate Analysis
 I also performed Bivariate Analysis on some of the columns of my DataFrame to look for any possiple patterns or relationships. 
