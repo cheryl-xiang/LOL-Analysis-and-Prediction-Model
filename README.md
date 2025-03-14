@@ -46,7 +46,6 @@ The original data set has `149232` rows, and `123` columns from `12549` recorded
 
         
 
-
 ## Data Cleaning and Exploratory Data Analysis
 ### Data Cleaning
 
@@ -54,7 +53,7 @@ To prepare the data for analysis, only relevant columns were kept in the dataset
 
 Furthermore, the I renamed the `win` column, originally called `result` and converted its original binary values of 1 (indicating win) and 0 (indicating lose) to boolean values for clarity. In order to preserve consistency, I also converted the `wardsplaced`, `wardscleared`, `visionscore`, `damagetochampions`, `monsterkills` columns, which originally contained whole number floats into integers. 
 
-Within the League of Legend community, the act of removing enemy wards from the map is most often referred to as "clearing wards" rather than "killing wards," so I renamed the `wardskilled` column to `wardscleared` in order to reflect this convention.
+Within the League of Legends community, the act of removing enemy wards from the map is most often referred to as "clearing wards" rather than "killing wards," so I renamed the `wardskilled` column to `wardscleared` in order to reflect this convention.
 
 The original data set includes rows with team summary statistics for each match. I will be looking primarily at individual players statisitics, so these rows are not needed, and were filtered out based on the `position` column which contained the string "team" rather any of the five playable positions for team rows. For any analysis that needs to be performed on a team level, team data can be recovered by aggregating the cleaned DataFrame using the `gameid` and `teamid` columns. 
 
@@ -73,7 +72,6 @@ Below is head of my cleaned DataFrame:
 
         
 
-
 ### Univariate Analysis
 For my initial EDA, I performed Univariate Analysis on some of the columns of my DataFrame.  
 
@@ -89,7 +87,6 @@ Above, we can see the distribution of `wardsplaced` by players across all matche
 
         
 
-
 <iframe
   src="assets/UnivariateVisionScore.html"
   width="800"
@@ -100,7 +97,6 @@ Above, we can see the distribution of `wardsplaced` by players across all matche
 The distribution of `visionscore` across all players is also skewed right, but appears to be closer to normal than the distribution of wards placed by players as the right side of the histogram tapers off much more gradually. According to this distribution, around 44% players had a vision score between 20 and 39.  
 
         
-
 
 ### Bivariate Analysis
 I also performed Bivariate Analysis on some of the columns of my DataFrame to look for any possiple patterns or relationships. 
@@ -115,8 +111,7 @@ I also performed Bivariate Analysis on some of the columns of my DataFrame to lo
 
 Looking at the distributions of `visionscore` for winning and losing players, we can see that the median for winning players (41) is higher than the median for losing players (35). This suggests that a higher `visionscore` may be associated with winning a match and that vision control could be an important aspect of a match when it comes to securing a win.
 
-         
-
+  
 
 <iframe
   src="assets/BivariateVSPosition.html"
@@ -127,8 +122,7 @@ Looking at the distributions of `visionscore` for winning and losing players, we
 
 From this plot, we can clearly see that the median `visionscore` for players in the support role (77) is noticeably higher than the median scores of other positions, which range from 29 to 41. This suggests that the primary objectives of a support player often revolve around vision control. As such, support players are likely more involved in placing and clearing wards, as well as utilizing champion abilities that enhance vision during the match.
 
-
-         
+          
 
 ### Interesting Aggregates
 
@@ -146,7 +140,6 @@ We can see that although the players in the bottom and and jungle position clear
 
           
 
-
 Here is another aggregated DataFrame with the averages of vision related statistics grouped by winning and losing players.
 
 | win   |   wardsplaced |   wardscleared |   visionscore |
@@ -156,8 +149,7 @@ Here is another aggregated DataFrame with the averages of vision related statist
 
 Based on the DataFrame, it appears that teams that win tend to have slightly higher ward placement and clearance averages, as well as a noticeably higher vision score. The difference in the average number of wards placed between wins and losses is relatively small, with winning teams placing slightly more wards on average. This suggests that while placing wards is important, the overall number of wards placed may not be the sole determining factor for winning or losing. Other elements like ward positioning and map awareness may also contribute to the result. Winning teams cleared slightly more wards than losing teams. This could imply that the winning team is more proactive in denying vision and clearing enemy wards, possibly giving them a better sense of map control, reducing the enemy's vision, and preventing the opposing team from setting up crucial wards. The vision score of winning teams is notably higher (by about 5.3 points) compared to losing teams. A higher vision score can indicate that the winning team is more actively controlling vision on the map.
 
-
-      
+       
 
 ## Assessment of Missingness
 
@@ -169,9 +161,7 @@ There are also `35210` missing values in the `split` column. I believe that thes
 
 Some additional data that could be obtained to make the `split` column MAR (Missing ar Random) is `match_type` which would specify the context of the match whether it be a regular split match or part of an event that occurs outside of splits such as Playoffs, Worlds, Mid-Season Invitational (MSI), and regional special events. If we find that the missingness of `split` occurs for certain match types, then we can conclude that this column's missingness depends on `match_type`.
 
-         
-
-           
+                 
 
 ### Missingness Dependency
 
@@ -217,7 +207,6 @@ Following my permutation tests, I found an observed TVD of `0.743589134206336` a
 
    
 
-
 I will also be testing if the missingness of `teamid` depends on `position` using the folowing hypotheses:
 
 **Null Hypothesis:** The distribution of `position` when `teamid` is missing is the same as the distribution of `position` when `teamid` is not missing.
@@ -249,9 +238,7 @@ Here is the Empirical Distribution of the TVD between the two columns:
   
 This time, I found an observed TVD of `0.0` and a p-value of `1.0`. This p-value is much higher than our significance level of `0.05`, so we fail to reject the null hypothesis.
 
-  
-
-
+   
 
 ## Hypothesis Testing
 
@@ -316,14 +303,13 @@ All the columns I will be using for my model are statistics that are collected t
 
     
 
-
 ## Baseline Model
 
 For my baseline model, I used a **Random Forest Classifier**, with the following four features: `visionscore`, `wardsplaced`, `kills`, and `assists`. Based on my exploration of the data set, I have noticed that support players tend to have higher values in the `visionscore`, `wardsplaced`, and `assists` columns compared to the four other positions in a League of Legends team. Conversely, they also tend to have a lower `kills` count compared to other positions. These patterns suggest that these columns would be good predictors of whether or not a player's position was support. All four of the selected feature are numerical. Match length times can vary greatly, which can lead to skewed distributions for each feature, so I used a StandardScaler Transformer to standardize the features.
 
 After fitting, this baseline model earned a precision score of `0.9322591252877342`. This high precision indicates that, out of all the instances the model predicted as "positive" (player is support), a very high proportion were actually correct. Given this, I believe the model is performing well, especially in terms of minimizing false positives.
 
-  
+   
 
 ## Final Model
 
@@ -352,7 +338,6 @@ Here is the **confusion matrix** for my final model:
 ></iframe>
 
   
-    
 
 ## Fairness Analysis
 
