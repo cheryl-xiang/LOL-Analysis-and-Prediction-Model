@@ -319,7 +319,7 @@ All the columns I will be using for my model are statistics that are collected t
 
 ## Baseline Model
 
-For my baseline model, I used a Random Forest Classifier, with the following four features: `visionscore`, `wardsplaced`, `kills`, and `assists`. Based on my exploration of the data set, I have noticed that support players tend to have higher values in the `visionscore`, `wardsplaced`, and `assists` columns compared to the four other positions in a League of Legends team. Conversely, they also tend to have a lower `kills` count compared to other positions. These patterns suggest that these columns would be good predictors of whether or not a player's position was support. All four of the selected feature are numerical. Match length times can vary greatly, which can lead to skewed distributions for each feature, so I used a StandardScaler Transformer to standardize the features.
+For my baseline model, I used a **Random Forest Classifier**, with the following four features: `visionscore`, `wardsplaced`, `kills`, and `assists`. Based on my exploration of the data set, I have noticed that support players tend to have higher values in the `visionscore`, `wardsplaced`, and `assists` columns compared to the four other positions in a League of Legends team. Conversely, they also tend to have a lower `kills` count compared to other positions. These patterns suggest that these columns would be good predictors of whether or not a player's position was support. All four of the selected feature are numerical. Match length times can vary greatly, which can lead to skewed distributions for each feature, so I used a StandardScaler Transformer to standardize the features.
 
 After fitting, this baseline model earned a precision score of `0.9322591252877342`. This high precision indicates that, out of all the instances the model predicted as "positive" (player is support), a very high proportion were actually correct. Given this, I believe the model is performing well, especially in terms of minimizing false positives.
 
@@ -327,9 +327,15 @@ After fitting, this baseline model earned a precision score of `0.93225912528773
 
 ## Final Model
 
-To improve my model, I first added two new numerical features: `damagetochampions` and `monsterkills`. Both of these columns are numerical, so I will be using the StandardScaler transformer on them. In League of Legends matches, the role of support does not play a big part in dealing damage or making kills, but rather focuses on assisting other players on your team in terms of vision, crowd control, and utility (such as heals and shields). As a result, support players tend to have lower damage to champions (the opposing team's players) and monster kills, since dealing damage is not their focus. Players in support roles should have lower numbers in these DataFrame columns, so I believe they would make suitable features for my improved model.
+To improve my model, I first added two new numerical features: `damagetochampions` and `monsterkills`. Both of these columns are numerical, so I will be using the StandardScaler transformer on them. 
 
-I also used `GridSearchCV` to tune the following hyperparameters for my final Random Forest Classifier model: max_depth, min_samples_split, and criterion. I chose to tune max depth, because it is an important factor when it comes to overfitting or underfitting models. A bigger max depth results in less bias and more variance, while a bigger 'min_samples_split' results in more bias and less variance, so I also want to tune this hyperparameter in order to balance the two out. Finally, I am looking at criterion to improve the overall quality of the splits.After verifying that **entropy** was the best criterion for my model, I focused on the two numerical hyperparameters. In each iteration of `GridSearchCV`, I selected 3 values for both max_depth and min_samples_split. From there, I performed `GridSearchCV` within the range of the resulting ideal hyperparameter until I narrowed my range enough for the values to stop changing. After this process, the best hyperparameters turned out to be: criterion = **entropy**, max_depth = **12**, and min_samples_split = **10**.
+In League of Legends matches, the role of support does not play a big part in dealing damage or making kills, but rather focuses on assisting other players on your team in terms of vision, crowd control, and utility (such as heals and shields). As a result, support players tend to have lower damage to champions (the opposing team's players) and monster kills, since dealing damage is not their focus. Players in support roles should have lower numbers in these DataFrame columns, so I believe they would make suitable features for my improved model.
+
+I also used `GridSearchCV` to tune the following hyperparameters for my final Random Forest Classifier model: max_depth, min_samples_split, and criterion. 
+
+I chose to tune max depth, because it is an important factor when it comes to overfitting or underfitting models. A bigger max depth results in less bias and more variance, while a bigger 'min_samples_split' results in more bias and less variance, so I also want to tune this hyperparameter in order to balance the two out. Finally, I am looking at criterion to improve the overall quality of the splits.
+
+After verifying that **entropy** was the best criterion for my model, I focused on the two numerical hyperparameters. In each iteration of `GridSearchCV`, I selected 3 values for both max_depth and min_samples_split. From there, I performed `GridSearchCV` within the range of the resulting ideal hyperparameter until I narrowed my range enough for the values to stop changing. After this process, the best hyperparameters turned out to be: criterion = **entropy**, max_depth = **12**, and min_samples_split = **10**.
 
   
 My final model achieved a precision score of `0.9790356394129979`, which is around a **5%** improvement from my baseline model's precision score. This significant improvement in precision suggests that my final model is much better at correctly identifying support players, with a lower rate of false positives compared to the baseline model.
@@ -340,7 +346,14 @@ Here is the **confusion matrix** for my final model:
 
 <iframe
   src="assets/FinalConfusionMatrix.png"
-  width="800"
-  height="600"
+  width="600"
+  height="400"
   frameborder="0"
 ></iframe>
+
+  
+    
+
+## Fairness Analysis
+
+
