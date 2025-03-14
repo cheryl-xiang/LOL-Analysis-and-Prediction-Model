@@ -357,3 +357,33 @@ Here is the **confusion matrix** for my final model:
 ## Fairness Analysis
 
 
+For this section, I am assessing the fairness of my model among different groups. I am trying to answer the question: **“does my model perform worse for players  withless than 12000 `damagetochampions` than it does for players with at least 12000 `damagetochampions`?”** To answer this question, I will perform a permutation test and examine the difference in precision between the two groups.
+
+**Group X:** Players with with less than 12000 `damagetochampions`
+
+**Group Y:** Players with greater than or equal to 12000 `damagetochampions`
+
+- **Null Hypothesis:** The classifier's precision is the same for both players with over and under 12000 `damagetochampions`, and any differences are due to chance.
+
+- **Alternative Hypothesis:** The classifier's precision is higher for players with at least 12000 `damagetochampions`.
+
+- **Test Statistic:** Difference in Precision (X - Y)
+
+- **Significance Level:** 0.05
+
+- **Evaluation Metric:** Precision
+
+
+   
+
+Here is the empirical distribution of the difference in precision (X - Y)
+
+<iframe
+  src="assets/DiffPrecision.html"
+  width="600"
+  height="400"
+  frameborder="0"
+></iframe>
+
+
+This permutation test yielded an observed difference of `0.14087139876292287` and a p-value of `0.0`, which is less than my significance level of `0.05`. As a result, I reject the null hypothesis that the classifier's precision is the same for both players with over and under 12000 `damagetochampions`, and any differences are due to chance. Based on this, my model seems to be unfair, achieving a higher precision for players with at least 12000 `damagetochampions`.
